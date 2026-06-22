@@ -36,7 +36,7 @@ This project is an end-to-end exploratory data analysis of 1,200 e-commerce orde
 - **Python** — Pandas, NumPy
 - **Visualization** — Matplotlib, Seaborn
 - **Techniques** — Five-number summaries, mean/median skew comparison, IQR outlier detection, Pearson correlation analysis, categorical cross-tabulation, time-series aggregation
-- - **SQL** — Microsoft SQL Server Management Studio (SSMS); SELECT, WHERE, GROUP BY, ORDER BY, HAVING, COUNT(), SUM(), AVG(), ROUND(), CTEs
+- **SQL** — Microsoft SQL Server Management Studio (SSMS); SELECT, WHERE, GROUP BY, ORDER BY, HAVING, COUNT(), SUM(), AVG(), ROUND(), CTEs
  
 ## Data Source
 
