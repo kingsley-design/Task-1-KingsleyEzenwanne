@@ -26,8 +26,10 @@ This project is an end-to-end exploratory data analysis of 1,200 e-commerce orde
  
 | File | Description |
 |---|---|
-| `DecodeLabs.ipynb` | Full EDA notebook — univariate analysis, outlier detection, correlation analysis, order status investigation, AOV breakdowns, and executive summary |
 | `Dataset for Data Analytics Cleaned.csv` | Cleaned dataset (output of Project 1's data cleaning phase) |
+| `DecodeLabs.ipynb` | Full EDA notebook — univariate analysis, outlier detection, correlation analysis, order status investigation, AOV breakdowns, and executive summary (Project 2) |
+| `Project_3.sql` | SQL script answering 10 stakeholder business questions using SELECT, WHERE, GROUP BY, HAVING, and CTEs in SSMS (Project 3) |
+
  
 ## Tools & Methods
  
@@ -35,6 +37,7 @@ This project is an end-to-end exploratory data analysis of 1,200 e-commerce orde
 - **Visualization** — Matplotlib, Seaborn
 - **Techniques** — Five-number summaries, mean/median skew comparison, IQR outlier detection, Pearson correlation analysis, categorical cross-tabulation, time-series aggregation
 ## Data Source
+- **SQL** — Microsoft SQL Server Management Studio (SSMS); SELECT, WHERE, GROUP BY, ORDER BY, HAVING, COUNT(), SUM(), AVG(), ROUND(), CTEs
  
 1,200-row e-commerce order dataset (`Dataset_for_Data_Analytics.xlsx`), cleaned in Project 1 via Excel Power Query: missing `CouponCode` values imputed, floating-point precision errors in price columns corrected, and duplicate/format integrity verified.
  
