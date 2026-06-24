@@ -1,46 +1,73 @@
-# E-Commerce Order Fulfillment & Sales Analysis: Diagnosing a 41% Revenue Leak
- 
-**DecodeLabs Industrial Training Kit — Project 2 (Exploratory Data Analysis)**
+# E-Commerce Data Cleaning & Preparation (Task-1)
+
+**DecodeLabs Industrial Training Kit — Task-1 (Data Cleaning & Preparation)**
 *By Kingsley Ezenwanne | Batch 2026*
- 
+
 ## Overview
- 
-This project is an end-to-end exploratory data analysis of 1,200 e-commerce orders, investigating sales performance, pricing drivers, and — most critically — why over 41% of total potential revenue is being lost to cancelled and returned orders. The dataset was cleaned in a prior phase (Project 1) using Excel Power Query before being loaded here for analysis in Python.
- 
-## Key Findings
- 
-- **41.42% of all orders, and 41.09% of total revenue ($519,674), are lost to cancellations and returns.** This rate holds steady across payment methods and product categories, pointing to a systemic issue rather than one tied to a specific channel or product.
-- **UnitPrice (r = 0.72) and Quantity (r = 0.62) are the strongest, largely independent drivers of order value** (Quantity–UnitPrice correlation ≈ 0.01). ItemsInCart shows a moderate relationship with Quantity (r = 0.65) but only a weak one with TotalPrice (r = 0.39).
-- **High-TotalPrice outliers are signal, not noise.** They consistently involve the maximum quantity (5 units) of high-value products — Laptops, Printers, and Tablets — representing legitimate bulk/high-value purchases rather than data errors.
-- **Chair and Printer are effectively tied for top revenue-generating product** ($195,620 vs. $195,612), closely followed by Laptop — too close to call a single "winner."
-- **Orders placed without a coupon have a noticeably higher return rate (24.6%)** than coupon-using orders (16–22%), suggesting coupon users may be more committed buyers.
-- **Facebook referrals carry the highest average order value (~$1,098)** among all referral sources, while AOV barely varies by payment method.
-## Recommendations
- 
-1. Prioritize root-cause investigation into the 41% unfulfilled order rate — this is the single highest-impact opportunity in the dataset.
-2. Expand coupon campaigns, given their association with lower return rates and higher buyer commitment.
-3. Shift marketing budget toward higher-AOV channels like Facebook.
-4. Build targeted offers around high-quantity, high-value product bundles (Laptops, Printers, Tablets).
-5. Set up ongoing monitoring of order status, AOV by segment, and sales trends to catch shifts early.
+
+This project represents the foundation phase of the DecodeLabs Data Analytics Internship. Using Excel Power Query, a raw 1,200-row e-commerce dataset was audited, cleaned, and validated to produce a reliable, analysis-ready source of truth. The focus was not on charts or dashboards — it was on data integrity: identifying and resolving every quality issue before any analysis could begin.
+
+## Objectives
+
+- Identify and handle missing or null values
+- Verify and eliminate duplicate records
+- Correct data formatting issues across numeric and text columns
+- Validate pricing logic across all records
+- Document every transformation in a structured Change Log
+
+## Tools Used
+
+- **Microsoft Excel** — Power Query Editor, Custom Column formulas
+
+## Dataset
+
+| Property | Detail |
+|---|---|
+| File | `Dataset for Data Analytics.xlsx` |
+| Records | 1,200 orders |
+| Columns | 14 (OrderID, Date, CustomerID, Product, Quantity, UnitPrice, ShippingAddress, PaymentMethod, OrderStatus, TrackingNumber, ItemsInCart, CouponCode, ReferralSource, TotalPrice) |
+
+## Data Quality Issues Found & Resolved
+
+| Change ID | Issue | Action Taken | Impact | Status |
+|---|---|---|---|---|
+| CR001 | 309 blank CouponCode values | Imputed with `~No Coupon~` label | Preserved all 309 records, avoided data loss | Resolved |
+| CR002 | Floating-point precision errors in UnitPrice & TotalPrice | Rounded both columns to 2 decimal places | Fixed 29 affected records | Resolved |
+| CR003 | Potential duplicate OrderIDs | Verified via Group By/Count check | Confirmed all 1,200 records are unique | Resolved |
+| CR004 | Pricing logic consistency | Validated Quantity × UnitPrice = TotalPrice | Zero mismatches across all 1,200 rows | Resolved |
+
+## Key Steps Performed
+
+**Step 1 — Load into Power Query**
+Data was loaded via Data → From Table/Range into the Power Query Editor, enabling a reproducible, step-tracked cleaning workflow.
+
+**Step 2 — Column Quality Audit**
+View → Column Quality and Column Profile were enabled to get a per-column breakdown of valid, error, and empty percentages before any changes were made.
+
+**Step 3 — Missing Value Imputation**
+CouponCode had 309 blank values. Rather than deleting rows (which would have reduced the dataset by 25.75% and reduced statistical power), blanks were replaced with the label `~No Coupon~` — making the absence of a coupon an explicit, analyzable category.
+
+**Step 4 — Duplicate Verification**
+OrderIDs were checked via a duplicate Group By query on a separate query copy. Result: zero duplicates across all 1,200 records.
+
+**Step 5 — Floating-Point Precision Fix**
+29 TotalPrice records contained values with 13+ decimal places due to binary floating-point arithmetic (e.g., `769.3799999999999` instead of `769.38`). Both UnitPrice and TotalPrice were rounded to 2 decimal places using Transform → Round.
+
+**Step 6 — Pricing Validation**
+A custom column `PriceCheck` was added using the formula:
+```
+= Number.Round([Quantity] * [UnitPrice], 2) = Number.Round([TotalPrice], 2)
+```
+All 1,200 rows returned TRUE. The column was removed before the final load.
+
+**Step 7 — Final Load & Change Log**
+The cleaned table was loaded into Excel. A separate `Change Log` sheet was built documenting all four changes (CR001–CR004) with Change ID, Description, Impact, and Status columns.
+
 ## Repository Contents
- 
+
 | File | Description |
 |---|---|
-| `Dataset for Data Analytics Cleaned.csv` | Cleaned dataset (output of Project 1's data cleaning phase) |
-| `DecodeLabs.ipynb` | Full EDA notebook — univariate analysis, outlier detection, correlation analysis, order status investigation, AOV breakdowns, and executive summary (Project 2) |
-| `Project_3.sql` | SQL script answering 10 stakeholder business questions using SELECT, WHERE, GROUP BY, HAVING, and CTEs in SSMS (Project 3) |
+| `Dataset for Data Analytics Cleaned.xlsx` | Final cleaned workbook with cleaned data sheet and Change Log tab |
 
- 
-## Tools & Methods
- 
-- **Python** — Pandas, NumPy
-- **Visualization** — Matplotlib, Seaborn
-- **Techniques** — Five-number summaries, mean/median skew comparison, IQR outlier detection, Pearson correlation analysis, categorical cross-tabulation, time-series aggregation
-- **SQL** — Microsoft SQL Server Management Studio (SSMS); SELECT, WHERE, GROUP BY, ORDER BY, HAVING, COUNT(), SUM(), AVG(), ROUND(), CTEs
- 
-## Data Source
-
-1,200-row e-commerce order dataset (`Dataset_for_Data_Analytics.xlsx`), cleaned in Project 1 via Excel Power Query: missing `CouponCode` values imputed, floating-point precision errors in price columns corrected, and duplicate/format integrity verified.
- 
 ---
-*Part of the DecodeLabs Data Analytics Internship — Batch 2026*
+*Part of the DecodeLabs Data Analytics Industrial Training Kit — Batch 2026*
